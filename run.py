@@ -40,4 +40,16 @@ def display_high_scores():
         else:
             print(f"{i}. N/A")
 
-display_high_scores()
+# Function to get valid board size input
+def get_board_size():
+    while True:
+        try:
+            size = int(input("Choose board size (5-10): "))
+            if 5 <= size <= 10:
+                return size
+            else:
+                print("Invalid size. Please enter a number between 5 and 10.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+
+print(get_board_size())
