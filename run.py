@@ -103,3 +103,35 @@ player_board, computer_board = create_boards(5)
 player_ships = place_ships(player_board, 5)  # 5 ships of length 1
 computer_ships = place_ships(computer_board, 5)
 display_boards(player_board, computer_board)
+
+# Function to get valid target coordinates
+def get_target(board):
+    while True:
+        try:
+            row_letter = input("Enter row (A-{}). ".format(chr(ord('A') + len(board) - 1))).upper()
+            row = string.ascii_uppercase.index(row_letter.upper())
+            col = int(input("Enter column (1-{}). ".format(len(board)))) - 1
+            if 0 <= row < len(board) and 0 <= col < len(board[0]):
+                return row, col
+            else:
+                print("Invalid coordinates. Please enter numbers within the board size.")
+        except ValueError:
+            print("Invalid input. Please enter letters for Rows and numbers for columns.")
+
+# Function to handle player's turn
+def player_turn(player_board, computer_board, computer_ships, score):
+    print(bcolors.OKBLUE + "\nYour turn:" + bcolors.ENDC)
+    display_boards(player_board, computer_board)
+    row, col = get_target(computer_board)
+    if (row, col) in computer_ships:
+        computer_board[row][col] = 'X'
+        computer_ships.remove((row, col))
+        score += 1
+        print(bcolors.OKGREEN + "Hit!" + bcolors.ENDC)
+    else:
+        computer_board[row][col] = 'M'
+        print(bcolors.FAIL + "Miss!" + bcolors.ENDC)
+    print(bcolors.OKCYAN + "\nScore: " + bcolors.ENDC + str(score))
+    return computer_board, computer_ships, score
+
+print(player_turn(player_board, computer_board, computer_ships, 0))
