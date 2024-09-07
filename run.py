@@ -2,6 +2,7 @@ import random
 import gspread
 from google.oauth2.service_account import Credentials
 import string
+import os
 
 # Set up Google Sheets API Credentials
 SCOPE = [
@@ -15,6 +16,11 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('battleship_scores').sheet1
 
+# Function to pause and clear the screen
+def pause():
+  input(bcolors.OKCYAN + "\nPress Enter to continue..." + bcolors.ENDC)
+  os.system('cls' if os.name == 'nt' else 'clear') # Clear the screen
+    
 # Colors for console output
 class bcolors:
     HEADER = '\033[95m'
@@ -145,6 +151,7 @@ def computer_turn(player_board, player_ships, score):
             player_board[row][col] = 'M' 
             print(bcolors.FAIL + "Computer missed! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
             break
+    pause() # Call the pause function after the computer's turn
     return player_board, player_ships, score
 
 # Function to handle the game loop
