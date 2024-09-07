@@ -117,12 +117,10 @@ def display_boards(player_board, computer_board):
                 player_row.append(player_board[i][j])
             if computer_board[i][j] == 'X':
                 computer_row.append(bcolors.FAIL + bcolors.BOLD + 'X' + bcolors.ENDC)  # Red 'X' for hit
-            elif computer_board[i][j] == 'S':
-                computer_row.append(bcolors.OKBLUE + bcolors.BOLD + 'S' + bcolors.ENDC)  # Blue 'S' for ship
             elif computer_board[i][j] == 'M':
                 computer_row.append(bcolors.OKGREEN + bcolors.BOLD + 'M' + bcolors.ENDC)  # Green 'M' for miss
             else:
-                computer_row.append(computer_board[i][j])
+                computer_row.append('O')
         player_row_str = ' '.join(player_row)
         computer_row_str = ' '.join(computer_row)
         print(f"{letters[i]:<2} {player_row_str:<{len(player_row_str) + 2}} | {letters[i]:<2} {computer_row_str:<{len(player_row_str) + 2}}")
@@ -177,6 +175,7 @@ def computer_turn(player_board, player_ships, misses):
 # Function to handle the game loop
 def play_game():
     while True:  # Loop for playing multiple games
+        os.system('cl' if os.name == 'nt' else 'clear') # Clear the screen
         welcome_message()
         display_high_scores()
         board_size = get_board_size()
@@ -203,6 +202,7 @@ def play_game():
         while True:  # Loop for validating play again input
             play_again = input("\nPlay again? (y/n): ").lower()  # Convert input to lowercase
             if play_again in ('y', 'n'):
+                os.system('cls' if os.name == 'nt' else 'clear') # Clear the screen
                 break
             else:
                 print("Invalid input. Please enter 'y' or 'n'.")
