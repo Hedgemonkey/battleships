@@ -24,11 +24,11 @@ def pause():
 # Colors for console output
 class bcolors:
     HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
+    OKBLUE = '\033[34m'
     OKCYAN = '\033[96m'
-    OKGREEN = '\033[92m'
+    OKGREEN = '\033[32m'
     WARNING = '\033[93m'
-    FAIL = '\033[91m'
+    FAIL = '\033[31m'
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
@@ -108,19 +108,19 @@ def display_boards(player_board, computer_board):
         computer_row = []
         for j in range(board_size):
             if player_board[i][j] == 'X':
-                player_row.append(bcolors.FAIL + 'X' + bcolors.ENDC)  # Red 'X' for hit
+                player_row.append(bcolors.FAIL + bcolors.BOLD + 'X' + bcolors.ENDC)  # Red 'X' for hit
             elif player_board[i][j] == 'S':
-                player_row.append(bcolors.OKBLUE + 'S' + bcolors.ENDC)  # Blue 'S' for ship
+                player_row.append(bcolors.OKBLUE + bcolors.BOLD + 'S' + bcolors.ENDC)  # Blue 'S' for ship
             elif player_board[i][j] == 'M':
-                player_row.append(bcolors.OKGREEN + 'M' + bcolors.ENDC)  # Green 'M' for miss
+                player_row.append(bcolors.OKGREEN + bcolors.BOLD + 'M' + bcolors.ENDC)  # Green 'M' for miss
             else:
                 player_row.append(player_board[i][j])
             if computer_board[i][j] == 'X':
-                computer_row.append(bcolors.FAIL + 'X' + bcolors.ENDC)  # Red 'X' for hit
+                computer_row.append(bcolors.FAIL + bcolors.BOLD + 'X' + bcolors.ENDC)  # Red 'X' for hit
             elif computer_board[i][j] == 'S':
-                computer_row.append(bcolors.OKBLUE + 'S' + bcolors.ENDC)  # Blue 'S' for ship
+                computer_row.append(bcolors.OKBLUE + bcolors.BOLD + 'S' + bcolors.ENDC)  # Blue 'S' for ship
             elif computer_board[i][j] == 'M':
-                computer_row.append(bcolors.OKGREEN + 'M' + bcolors.ENDC)  # Green 'M' for miss
+                computer_row.append(bcolors.OKGREEN + bcolors.BOLD + 'M' + bcolors.ENDC)  # Green 'M' for miss
             else:
                 computer_row.append(computer_board[i][j])
         player_row_str = ' '.join(player_row)
