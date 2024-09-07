@@ -1,6 +1,7 @@
 import random
 import gspread
 from google.oauth2.service_account import Credentials
+import string
 
 # Set up Google Sheets API Credentials
 SCOPE = [
@@ -52,4 +53,9 @@ def get_board_size():
         except ValueError:
             print("Invalid input. Please enter a number.")
 
-print(get_board_size())
+# Function to create and initialize boards
+def create_boards(size):
+    player_board = [['O' for _ in range(size)] for _ in range(size)]
+    computer_board = [['O' for _ in range(size)] for _ in range(size)]
+    return player_board, computer_board
+    
