@@ -171,6 +171,23 @@ def play_game():
     else:
         print(bcolors.FAIL + "\nYou lose! Better luck next time." + bcolors.ENDC)
 
+# Function to handle saving scores to the spreadsheet
+def save_to_high_scores(score):
+    while True:
+        save_score = input("Do you want to save your score to the high scores? (y/n): ")
+        if save_score.lower() == 'y':
+            name = input("Enter your name: ")
+            sheet.append_row([name, score])
+            print("Score saved successfully!")
+            display_high_scores()
+            break
+        elif save_score.lower() == 'n':
+            print("Score not saved.")
+            display_high_scores()
+            break
+        else:
+            print("Invalid input. Please enter 'y' or 'n'.")
+
 # Main function to run the game
 if __name__ == "__main__":
     play_game()
