@@ -118,17 +118,17 @@ def player_turn(player_board, computer_board, computer_ships, score):
     print(bcolors.OKBLUE + "\nYour turn:" + bcolors.ENDC)
     display_boards(player_board, computer_board)
     row, col = get_target(computer_board)
+
     if (row, col) in computer_ships:
-        computer_board[row][col] = 'X'
+        computer_board[row][col] = 'X'  
         computer_ships.remove((row, col))
         score += 1
         print(bcolors.OKGREEN + "Hit! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
     else:
-        computer_board[row][col] = 'M'
+        computer_board[row][col] = 'M' 
         print(bcolors.FAIL + "Miss! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
     print(bcolors.OKCYAN + "\nScore: " + bcolors.ENDC + str(score))
     return computer_board, computer_ships, score
-
 # Function to handle computer's turn
 def computer_turn(player_board, player_ships, score):
     print(bcolors.OKCYAN + "\nComputer's turn:" + bcolors.ENDC)
@@ -136,13 +136,13 @@ def computer_turn(player_board, player_ships, score):
         row = random.randint(0, len(player_board) - 1)
         col = random.randint(0, len(player_board[0]) - 1)
         if (row, col) in player_ships:
-            player_board[row][col] = 'X'
+            player_board[row][col] = 'X' 
             player_ships.remove((row, col))
             score += 1
             print(bcolors.OKGREEN + "Computer hit! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
             break
         else:
-            player_board[row][col] = 'M'
+            player_board[row][col] = 'M' 
             print(bcolors.FAIL + "Computer missed! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
             break
     return player_board, player_ships, score
@@ -158,10 +158,10 @@ def play_game():
     player_score = 0
     computer_score = 0
     while player_ships and computer_ships:
-        player_board, computer_ships, player_score = player_turn(player_board, computer_board, computer_ships, player_score)
+        computer_board, computer_ships, player_score = player_turn(player_board, computer_board, computer_ships, player_score)
         if not computer_ships:
             break
-        computer_board, player_ships, computer_score = computer_turn(player_board, player_ships, computer_score)
+        player_board, player_ships, computer_score = computer_turn(player_board, player_ships, computer_score)
     print("\nFinal Score:")
     print(f"Player: {player_score}")
     print(f"Computer: {computer_score}")
