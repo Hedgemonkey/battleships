@@ -142,23 +142,22 @@ def get_target(board):
             print("Invalid input. Please enter letters for Rows and numbers for columns.")
 
 # Function to handle player's turn
-def player_turn(player_board, computer_board, computer_ships, score):
+def player_turn(player_board, computer_board, computer_ships, misses):
     print(bcolors.OKBLUE + "\nYour turn:" + bcolors.ENDC)
     display_boards(player_board, computer_board)
     row, col = get_target(computer_board)
-
     if (row, col) in computer_ships:
         computer_board[row][col] = 'X'  
         computer_ships.remove((row, col))
-        score += 1
         print(bcolors.OKGREEN + "Hit! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
     else:
         computer_board[row][col] = 'M' 
         print(bcolors.FAIL + "Miss! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
-    print(bcolors.OKCYAN + "\nScore: " + bcolors.ENDC + str(score))
-    return computer_board, computer_ships, score
+        misses += 1  # Increment misses on miss
+    print(bcolors.OKCYAN + "\nMisses: " + bcolors.ENDC + str(misses))
+    return computer_board, computer_ships, misses
 # Function to handle computer's turn
-def computer_turn(player_board, player_ships, score):
+def computer_turn(player_board, player_ships, misses):
     print(bcolors.OKCYAN + "\nComputer's turn:" + bcolors.ENDC)
     while True:
         row = random.randint(0, len(player_board) - 1)
@@ -166,64 +165,63 @@ def computer_turn(player_board, player_ships, score):
         if (row, col) in player_ships:
             player_board[row][col] = 'X' 
             player_ships.remove((row, col))
-            score += 1
             print(bcolors.OKGREEN + "Computer hit! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
             break
         else:
             player_board[row][col] = 'M' 
             print(bcolors.FAIL + "Computer missed! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
+            misses += 1  # Increment misses on miss
             break
     pause() # Call the pause function after the computer's turn
-    return player_board, player_ships, score
-
+    return player_board, player_ships, misses
 # Function to handle the game loop
 def play_game():
     while True:  # Loop for playing multiple games
         welcome_message()
         display_high_scores()
         board_size = get_board_size()
-        pause()
+        pause() # Call pause after board size is chosen
         player_board, computer_board = create_boards(board_size)
         player_ships = place_ships(player_board, 5)  # 5 ships of length 1
         computer_ships = place_ships(computer_board, 5)
-        player_score = 0
-        computer_score = 0
+        player_misses = 0
+        computer_misses = 0
         while player_ships and computer_ships:
-            computer_board, computer_ships, player_score = player_turn(player_board, computer_board, computer_ships, player_score)
-            if not computer_ships:
-                break
-            player_board, player_ships, computer_score = computer_turn(player_board, player_ships, computer_score)
+            computer_board, computer_ships, player_misses = player_turn(player_board, computer_board, computer_ships, player_misses)
+            if not computer_ships:  # Check if computer ships are empty
+                print(bcolors.OKGREEN + "\nCongratulations! You win!" + bcolors.ENDC)
+                save_to_high_scores(player_misses)
+                break # Exit the inner loop if the player wins
+            player_board, player_ships, computer_misses = computer_turn(player_board, player_ships, computer_misses)
+            if not player_ships:  # Check if player ships are empty
+                print(bcolors.FAIL + "\nYou lose! Better luck next time." + bcolors.ENDC)
+                break # Exit the inner loop if the player loses
         print("\nFinal Score:")
-        print(f"Player: {player_score}")
-        print(f"Computer: {computer_score}")
-        if player_score > computer_score:
-            print(bcolors.OKGREEN + "\nCongratulations! You win!" + bcolors.ENDC)
-            save_to_high_scores(player_score)
-        else:
-            print(bcolors.FAIL + "\nYou lose! Better luck next time." + bcolors.ENDC)
-
+        print(f"Player: {player_misses}")
+        print(f"Computer: {computer_misses}")
+        
         while True:  # Loop for validating play again input
             play_again = input("\nPlay again? (y/n): ").lower()  # Convert input to lowercase
             if play_again in ('y', 'n'):
-                os.system('cls' if os.name == 'nt' else 'clear') # Clear the screen
                 break
             else:
                 print("Invalid input. Please enter 'y' or 'n'.")
         if play_again == 'n':
             print("Goodbye!")
-            break  # Exit the game loop if the player chooses not to play again
-
+            break  # Exit the game loop
 # Function to handle saving scores to the spreadsheet
-def save_to_high_scores(score):
+def save_to_high_scores(misses):
     while True:
         save_score = input("Do you want to save your score to the high scores? (y/n): ")
         if save_score.lower() == 'y':
             name = input("Enter your name: ")
-            SHEET.append_row([name, score])
+            SHEET.append_row([name, misses])
+            os.system('cls' if os.name == 'nt' else 'clear') # Clear the screen
             print("Score saved successfully!")
             display_high_scores()
             break
         elif save_score.lower() == 'n':
+            os.system('cls' if os.name == 'nt' else 'clear') # Clear the screen
             print("Score not saved.")
             display_high_scores()
             break
