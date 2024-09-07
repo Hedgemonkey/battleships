@@ -122,10 +122,10 @@ def player_turn(player_board, computer_board, computer_ships, score):
         computer_board[row][col] = 'X'
         computer_ships.remove((row, col))
         score += 1
-        print(bcolors.OKGREEN + "Hit!" + bcolors.ENDC)
+        print(bcolors.OKGREEN + "Hit! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
     else:
         computer_board[row][col] = 'M'
-        print(bcolors.FAIL + "Miss!" + bcolors.ENDC)
+        print(bcolors.FAIL + "Miss! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
     print(bcolors.OKCYAN + "\nScore: " + bcolors.ENDC + str(score))
     return computer_board, computer_ships, score
 
@@ -139,11 +139,11 @@ def computer_turn(player_board, player_ships, score):
             player_board[row][col] = 'X'
             player_ships.remove((row, col))
             score += 1
-            print(bcolors.OKGREEN + "Computer hit!" + bcolors.ENDC)
+            print(bcolors.OKGREEN + "Computer hit! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
             break
         else:
             player_board[row][col] = 'M'
-            print(bcolors.FAIL + "Computer missed!" + bcolors.ENDC)
+            print(bcolors.FAIL + "Computer missed! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
             break
     return player_board, player_ships, score
 
