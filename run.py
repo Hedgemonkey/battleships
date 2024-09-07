@@ -135,3 +135,21 @@ def player_turn(player_board, computer_board, computer_ships, score):
     return computer_board, computer_ships, score
 
 print(player_turn(player_board, computer_board, computer_ships, 0))
+
+# Function to handle computer's turn
+def computer_turn(player_board, player_ships, score):
+    print(bcolors.OKCYAN + "\nComputer's turn:" + bcolors.ENDC)
+    while True:
+        row = random.randint(0, len(player_board) - 1)
+        col = random.randint(0, len(player_board[0]) - 1)
+        if (row, col) in player_ships:
+            player_board[row][col] = 'X'
+            player_ships.remove((row, col))
+            score += 1
+            print(bcolors.OKGREEN + "Computer hit!" + bcolors.ENDC)
+            break
+        else:
+            player_board[row][col] = 'M'
+            print(bcolors.FAIL + "Computer missed!" + bcolors.ENDC)
+            break
+    return player_board, player_ships, score
