@@ -184,7 +184,7 @@ def save_to_high_scores(score):
         save_score = input("Do you want to save your score to the high scores? (y/n): ")
         if save_score.lower() == 'y':
             name = input("Enter your name: ")
-            sheet.append_row([name, score])
+            SHEET.append_row([name, score])
             print("Score saved successfully!")
             display_high_scores()
             break
