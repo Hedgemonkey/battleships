@@ -99,11 +99,6 @@ def display_boards(player_board, computer_board):
         computer_row = ' '.join(computer_board[i])
         print(f"{letters[i]:<2} {player_row:<{len(player_row) + 2}} | {letters[i]:<2} {computer_row:<{len(player_row) + 2}}")
 
-player_board, computer_board = create_boards(5)
-player_ships = place_ships(player_board, 5)  # 5 ships of length 1
-computer_ships = place_ships(computer_board, 5)
-display_boards(player_board, computer_board)
-
 # Function to get valid target coordinates
 def get_target(board):
     while True:
@@ -134,8 +129,6 @@ def player_turn(player_board, computer_board, computer_ships, score):
     print(bcolors.OKCYAN + "\nScore: " + bcolors.ENDC + str(score))
     return computer_board, computer_ships, score
 
-print(player_turn(player_board, computer_board, computer_ships, 0))
-
 # Function to handle computer's turn
 def computer_turn(player_board, player_ships, score):
     print(bcolors.OKCYAN + "\nComputer's turn:" + bcolors.ENDC)
@@ -153,3 +146,31 @@ def computer_turn(player_board, player_ships, score):
             print(bcolors.FAIL + "Computer missed!" + bcolors.ENDC)
             break
     return player_board, player_ships, score
+
+# Function to handle the game loop
+def play_game():
+    welcome_message()
+    display_high_scores()
+    board_size = get_board_size()
+    player_board, computer_board = create_boards(board_size)
+    player_ships = place_ships(player_board, 5)  # 5 ships of length 1
+    computer_ships = place_ships(computer_board, 5)
+    player_score = 0
+    computer_score = 0
+    while player_ships and computer_ships:
+        player_board, computer_ships, player_score = player_turn(player_board, computer_board, computer_ships, player_score)
+        if not computer_ships:
+            break
+        computer_board, player_ships, computer_score = computer_turn(player_board, player_ships, computer_score)
+    print("\nFinal Score:")
+    print(f"Player: {player_score}")
+    print(f"Computer: {computer_score}")
+    if player_score > computer_score:
+        print(bcolors.OKGREEN + "\nCongratulations! You win!" + bcolors.ENDC)
+        save_to_high_scores(player_score)
+    else:
+        print(bcolors.FAIL + "\nYou lose! Better luck next time." + bcolors.ENDC)
+
+# Main function to run the game
+if __name__ == "__main__":
+    play_game()
