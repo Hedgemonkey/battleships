@@ -30,4 +30,14 @@ class bcolors:
 def welcome_message():
     print(bcolors.HEADER + bcolors.BOLD + "\nWelcome to Battleships!\n" + bcolors.ENDC)
 
-welcome_message()
+# Function to display top 5 high scores
+def display_high_scores():
+    print(bcolors.OKCYAN + "\nTop 5 Highest Scores: (Lower Number is better)" + bcolors.ENDC)
+    scores = SHEET.get_all_values()
+    for i in range(2, 7):
+        if i <= len(scores):
+            print(f"{i}. {scores[i-1][0]}: {scores[i-1][1]}")
+        else:
+            print(f"{i}. N/A")
+
+display_high_scores()
