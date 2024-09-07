@@ -101,9 +101,28 @@ def display_boards(player_board, computer_board):
     print("   " + " ".join([str(i) for i in range(1, board_size + 1)]) + " "*spacing + "  |" + "    " + " ".join([str(i) for i in range(1, board_size + 1)]) + "  ")
     letters = list(string.ascii_uppercase[:board_size])
     for i in range(board_size):
-        player_row = ' '.join(player_board[i])
-        computer_row = ' '.join(computer_board[i])
-        print(f"{letters[i]:<2} {player_row:<{len(player_row) + 2}} | {letters[i]:<2} {computer_row:<{len(player_row) + 2}}")
+        player_row = []
+        computer_row = []
+        for j in range(board_size):
+            if player_board[i][j] == 'X':
+                player_row.append(bcolors.FAIL + 'X' + bcolors.ENDC)  # Red 'X' for hit
+            elif player_board[i][j] == 'S':
+                player_row.append(bcolors.OKBLUE + 'S' + bcolors.ENDC)  # Blue 'S' for ship
+            elif player_board[i][j] == 'M':
+                player_row.append(bcolors.OKGREEN + 'M' + bcolors.ENDC)  # Green 'M' for miss
+            else:
+                player_row.append(player_board[i][j])
+            if computer_board[i][j] == 'X':
+                computer_row.append(bcolors.FAIL + 'X' + bcolors.ENDC)  # Red 'X' for hit
+            elif computer_board[i][j] == 'S':
+                computer_row.append(bcolors.OKBLUE + 'S' + bcolors.ENDC)  # Blue 'S' for ship
+            elif computer_board[i][j] == 'M':
+                computer_row.append(bcolors.OKGREEN + 'M' + bcolors.ENDC)  # Green 'M' for miss
+            else:
+                computer_row.append(computer_board[i][j])
+        player_row_str = ' '.join(player_row)
+        computer_row_str = ' '.join(computer_row)
+        print(f"{letters[i]:<2} {player_row_str:<{len(player_row_str) + 2}} | {letters[i]:<2} {computer_row_str:<{len(player_row_str) + 2}}")
 
 # Function to get valid target coordinates
 def get_target(board):
