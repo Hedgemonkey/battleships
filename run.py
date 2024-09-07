@@ -39,11 +39,14 @@ def welcome_message():
 
 # Function to display top 5 high scores
 def display_high_scores():
-    print(bcolors.OKCYAN + "\nTop 5 Highest Scores: (Lower Number is better)" + bcolors.ENDC)
+    print(bcolors.OKCYAN + "\nTop 5 Lowest Misses:" + bcolors.ENDC)
     scores = SHEET.get_all_values()
-    for i in range(2, 7):
-        if i <= len(scores):
-            print(f"{i}. {scores[i-1][0]}: {scores[i-1][1]}")
+    # Sort by the score (second column, index 1)
+    sorted_scores = scores[1:]  # Ignore the first row (header)
+    sorted_scores.sort(key=lambda x: int(x[1]))  # Sort based on the score column (index 1)
+    for i in range(1, 6):  # Start the loop from 1
+        if i <= len(sorted_scores):  # Use sorted_scores for indexing
+            print(f"{i}. {sorted_scores[i-1][0]}: {sorted_scores[i-1][1]}")
         else:
             print(f"{i}. N/A")
 
