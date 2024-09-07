@@ -26,4 +26,8 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
+# Function to display the welcome message with colors
+def welcome_message():
+    print(bcolors.HEADER + bcolors.BOLD + "\nWelcome to Battleships!\n" + bcolors.ENDC)
 
+welcome_message()
