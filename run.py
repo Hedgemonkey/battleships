@@ -155,16 +155,21 @@ def get_target(board):
 def player_turn(player_board, computer_board, computer_ships, misses):
     print(bcolors.OKBLUE + "\nYour turn:" + bcolors.ENDC)
     display_boards(player_board, computer_board)
-    row, col = get_target(computer_board)
-    if (row, col) in computer_ships:
-        computer_board[row][col] = 'X'  
-        computer_ships.remove((row, col))
-        print(bcolors.OKGREEN + "Hit! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
-    else:
-        computer_board[row][col] = 'M' 
-        print(bcolors.FAIL + "Miss! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
-        misses += 1  # Increment misses on miss
-    print(bcolors.OKCYAN + "\nMisses: " + bcolors.ENDC + str(misses))
+    while True:
+        row, col = get_target(computer_board)
+        if computer_board[row][col] == 'M' or computer_board[row][col] == 'X':
+            print(bcolors.WARNING + "You already tried that target. Choose another one.\n" + bcolors.ENDC)
+        else:
+            if (row, col) in computer_ships:
+                computer_board[row][col] = 'X'  
+                computer_ships.remove((row, col))
+                print(bcolors.OKGREEN + "Hit! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
+            else:
+                computer_board[row][col] = 'M' 
+                print(bcolors.FAIL + "Miss! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
+                misses += 1  # Increment misses on miss
+            print(bcolors.OKCYAN + "\nMisses: " + bcolors.ENDC + str(misses))
+            break
     return computer_board, computer_ships, misses
 # Function to handle computer's turn
 def computer_turn(player_board, player_ships, misses):
@@ -172,16 +177,19 @@ def computer_turn(player_board, player_ships, misses):
     while True:
         row = random.randint(0, len(player_board) - 1)
         col = random.randint(0, len(player_board[0]) - 1)
-        if (row, col) in player_ships:
-            player_board[row][col] = 'X' 
-            player_ships.remove((row, col))
-            print(bcolors.OKGREEN + "Computer hit! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
-            break
+        if player_board[row][col] == 'M' or player_board[row][col] == 'X':
+            continue  # Try a different coordinate if it's already attempted
         else:
-            player_board[row][col] = 'M' 
-            print(bcolors.FAIL + "Computer missed! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
-            misses += 1  # Increment misses on miss
-            break
+            if (row, col) in player_ships:
+                player_board[row][col] = 'X' 
+                player_ships.remove((row, col))
+                print(bcolors.OKGREEN + "Computer hit! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
+                break
+            else:
+                player_board[row][col] = 'M' 
+                print(bcolors.FAIL + "Computer missed! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
+                misses += 1  # Increment misses on miss
+                break
     pause() # Call the pause function after the computer's turn
     return player_board, player_ships, misses
 # Function to handle the game loop
