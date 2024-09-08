@@ -25,7 +25,7 @@ def center_text(text):
 
 # Function to pause and clear the screen
 def pause():
-  input(bcolors.OKCYAN + center_text("\nPress Enter to continue...") + bcolors.ENDC)
+  input("\n" + bcolors.OKCYAN + center_text("Press Enter to continue...") + bcolors.ENDC)
   os.system('cls' if os.name == 'nt' else 'clear') # Clear the screen
     
 # Colors for console output
@@ -43,9 +43,14 @@ class bcolors:
 # Function to display the welcome message with colors
 def welcome_message():
     print(bcolors.HEADER + bcolors.BOLD + center_text("Welcome to Battleships!") + bcolors.ENDC)
+    print("\n" + bcolors.BOLD + center_text("Welcome to my simple battleships game!") + bcolors.ENDC)
+    print("\n" + bcolors.BOLD + center_text("The aim of the game is to hit your opponents ships in the least trys possible!") + bcolors.ENDC)
+    print("\n" + bcolors.BOLD + center_text("Just select a gameboard size between a 5x5 grid and a 9x9 grid!") + bcolors.ENDC)
+    print("\n" + bcolors.BOLD + center_text("Then enter the co-ordinates of where you want to shoot when prompted!") + bcolors.ENDC)
 
 # Function to display top 5 high scores
 def display_high_scores():
+    print("\n" + bcolors.HEADER + center_text("Current High Scores") + bcolors.ENDC)
     print("\n" + bcolors.OKCYAN + center_text("Top 5 Lowest Misses:") + bcolors.ENDC)
     scores = SHEET.get_all_values()
     # Sort by the score (second column, index 1)
