@@ -29,6 +29,8 @@ This is a simple command-line Battleship game written in Python, with a leader b
 | ![Screenshot of app on Heroku](readme/screenshot.png) |
 | This is the app showing the Welcome screenwith Leaderboard with scores sourced through Google Docs API |
 
+[Back to top](#contents)
+
 ## Flow Chart Screenshots
 | Flow Chart Screenshot |
 | :---: |
