@@ -5,32 +5,44 @@ import string
 import os
 import re
 
-# Set up Google Sheets API Credentials
+"""
+Set up Google Sheets API Credentials
+"""
 SCOPE = [
   "https://www.googleapis.com/auth/spreadsheets",
   "https://www.googleapis.com/auth/drive.file",
   "https://www.googleapis.com/auth/drive"
   ]
 
+
 CREDS = Credentials.from_service_account_file('creds.json')
 SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('battleship_scores').sheet1
 
-# Function to center text in the console
+
 def center_text(text):
+    """
+    Function to center text in the console
+    """
     console_width = os.get_terminal_size().columns
-    text_length = len(re.sub(r'\x1b\[[0-9;]*m', '', text))  # Remove color codes
-    padding = (console_width - text_length) // 2  # Calculate padding
+    text_length = len(re.sub(r'\x1b\[[0-9;]*m', '', text))
+    padding = (console_width - text_length) // 2
     return " " * padding + text + " " * padding
 
-# Function to pause and clear the screen
+
 def pause():
-  input("\n" + bcolors.OKCYAN + center_text("Press Enter to continue...") + bcolors.ENDC)
-  os.system('cls' if os.name == 'nt' else 'clear') # Clear the screen
-    
-# Colors for console output
+    """
+    Function to pause and clear the screen
+    """
+    input("\n" + bcolors.OKCYAN + center_text("Press Enter to continue...") + bcolors.ENDC)
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+
 class bcolors:
+    """
+    Colors for console output
+    """
     HEADER = '\033[95m'
     OKBLUE = '\033[34m'
     OKCYAN = '\033[96m'
@@ -41,30 +53,38 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
-# Function to display the welcome message with colors
+
 def welcome_message():
+    """
+    Function to display the welcome message with colors
+    """
     print(bcolors.HEADER + bcolors.BOLD + center_text("Welcome to Battleships!") + bcolors.ENDC)
     print("\n" + bcolors.BOLD + center_text("Welcome to my simple battleships game!") + bcolors.ENDC)
     print("\n" + bcolors.BOLD + center_text("The aim of the game is to hit your opponents ships in the least trys possible!") + bcolors.ENDC)
     print("\n" + bcolors.BOLD + center_text("Just select a gameboard size between a 5x5 grid and a 9x9 grid!") + bcolors.ENDC)
     print("\n" + bcolors.BOLD + center_text("Then enter the co-ordinates of where you want to shoot when prompted!") + bcolors.ENDC)
 
-# Function to display top 5 high scores
+
 def display_high_scores():
+    """
+    Function to display top 5 high scores
+    """
     print("\n" + bcolors.HEADER + center_text("Current High Scores") + bcolors.ENDC)
     print("\n" + bcolors.OKCYAN + center_text("Top 5 Lowest Misses:") + bcolors.ENDC)
     scores = SHEET.get_all_values()
-    # Sort by the score (second column, index 1)
-    sorted_scores = scores[1:]  # Ignore the first row (header)
-    sorted_scores.sort(key=lambda x: int(x[1]))  # Sort based on the score column (index 1)
-    for i in range(1, 6):  # Start the loop from 1
-        if i <= len(sorted_scores):  # Use sorted_scores for indexing
+    sorted_scores = scores[1:]
+    sorted_scores.sort(key=lambda x: int(x[1]))
+    for i in range(1, 6):
+        if i <= len(sorted_scores):
             print(center_text(f"{i}. {sorted_scores[i-1][0]}: {sorted_scores[i-1][1]}"))
         else:
             print(f"{i}. N/A")
 
-# Function to get valid board size input
+
 def get_board_size():
+    """
+    Function to get valid board size input
+    """
     while True:
         try:
             size = int(input("Choose board size (5-9): "))
@@ -75,14 +95,20 @@ def get_board_size():
         except ValueError:
             print("Invalid input. Please enter a number.")
 
-# Function to create and initialize boards
+
 def create_boards(size):
+    """
+    Function to create and initialize boards
+    """
     player_board = [['O' for _ in range(size)] for _ in range(size)]
     computer_board = [['O' for _ in range(size)] for _ in range(size)]
     return player_board, computer_board
-    
-# Function to place ships randomly
+
+
 def place_ships(board, num_ships):
+    """
+    Function to place ships randomly
+    """
     ship_locations = []
     for _ in range(num_ships):
         while True:
@@ -94,11 +120,13 @@ def place_ships(board, num_ships):
                 break
     return ship_locations
 
-# Function to display both boards side by side with colors and spacing
+
 def display_boards(player_board, computer_board):
+    """
+    Function to display both boards side by side with colors and spacing
+    """
     board_size = len(player_board)
-    # Calculate header spacing, adjusting for different board sizes
-    header_spacing = board_size - 3  #  Start with a base spacing and adjust
+    header_spacing = board_size - 3
     if board_size == 6:
         header_spacing -= 1
     elif board_size == 7:
@@ -107,9 +135,7 @@ def display_boards(player_board, computer_board):
         header_spacing -= 3
     elif board_size == 9:
         header_spacing -= 4
-    # Center the header using center_text()
     print("\n" + center_text(bcolors.RED + "Player Board  " + " "*header_spacing + bcolors.ENDC + " | " + bcolors.RED + " Computer Board" + bcolors.ENDC))
-    # Center the header using center_text()
     print("\n" + center_text(bcolors.OKCYAN + "   " + " ".join([str(i) for i in range(1, board_size + 1)]) + " " + bcolors.ENDC + "  |" + "    " + bcolors.OKCYAN + " ".join([str(i) for i in range(1, board_size + 1)]) + "  " + bcolors.ENDC))
     letters = list(string.ascii_uppercase[:board_size])
     for i in range(board_size):
@@ -117,28 +143,29 @@ def display_boards(player_board, computer_board):
         computer_row = []
         for j in range(board_size):
             if player_board[i][j] == 'X':
-                player_row.append(bcolors.RED + bcolors.BOLD + 'X' + bcolors.ENDC)  # Red 'X' for hit
+                player_row.append(bcolors.RED + bcolors.BOLD + 'X' + bcolors.ENDC)
             elif player_board[i][j] == 'S':
-                player_row.append(bcolors.OKBLUE + bcolors.BOLD + 'S' + bcolors.ENDC)  # Blue 'S' for ship
+                player_row.append(bcolors.OKBLUE + bcolors.BOLD + 'S' + bcolors.ENDC)
             elif player_board[i][j] == 'M':
-                player_row.append(bcolors.OKGREEN + bcolors.BOLD + 'M' + bcolors.ENDC)  # Green 'M' for miss
+                player_row.append(bcolors.OKGREEN + bcolors.BOLD + 'M' + bcolors.ENDC)
             else:
                 player_row.append(player_board[i][j])
             if computer_board[i][j] == 'X':
-                computer_row.append(bcolors.RED + bcolors.BOLD + 'X' + bcolors.ENDC)  # Red 'X' for hit
+                computer_row.append(bcolors.RED + bcolors.BOLD + 'X' + bcolors.ENDC)
             elif computer_board[i][j] == 'M':
-                computer_row.append(bcolors.OKGREEN + bcolors.BOLD + 'M' + bcolors.ENDC)  # Green 'M' for miss
+                computer_row.append(bcolors.OKGREEN + bcolors.BOLD + 'M' + bcolors.ENDC)
             else:
                 computer_row.append('O')
         player_row_str = ' '.join(player_row)
         computer_row_str = ' '.join(computer_row)
-        # Construct the entire row string
-        row_str = f"{bcolors.OKCYAN}{letters[i]:<2} {bcolors.ENDC}{player_row_str:<{len(player_row_str) + 2}} | {bcolors.OKCYAN}{letters[i]:<2}{bcolors.ENDC} {computer_row_str:<{len(computer_row_str) + 2}}"
-        # Print the centered row
+        row_str = f"{bcolors.OKCYAN}{letters[i]: <2} {bcolors.ENDC}{player_row_str: <{len(player_row_str) + 2}} | {bcolors.OKCYAN}{letters[i]: <2}{bcolors.ENDC} {computer_row_str: <{len(computer_row_str) + 2}}"
         print(center_text(row_str))
 
-# Function to get valid target coordinates
+
 def get_target(board):
+    """
+    Function to get valid target coordinates
+    """
     while True:
         try:
             row_letter = input("Enter row (A-{}). ".format(chr(ord('A') + len(board) - 1))).upper()
@@ -151,8 +178,11 @@ def get_target(board):
         except ValueError:
             print("Invalid input. Please enter letters for Rows and numbers for columns.")
 
-# Function to handle player's turn
+
 def player_turn(player_board, computer_board, computer_ships, misses):
+    """
+    Function to handle player's turn
+    """
     print(bcolors.OKBLUE + "\nYour turn:" + bcolors.ENDC)
     display_boards(player_board, computer_board)
     while True:
@@ -161,94 +191,108 @@ def player_turn(player_board, computer_board, computer_ships, misses):
             print(bcolors.WARNING + "You already tried that target. Choose another one.\n" + bcolors.ENDC)
         else:
             if (row, col) in computer_ships:
-                computer_board[row][col] = 'X'  
+                computer_board[row][col] = 'X'
                 computer_ships.remove((row, col))
                 print(bcolors.OKGREEN + "Hit! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
             else:
-                computer_board[row][col] = 'M' 
+                computer_board[row][col] = 'M'
                 print(bcolors.RED + "Miss! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
-                misses += 1  # Increment misses on miss
+                misses += 1
             print(bcolors.OKCYAN + "\nMisses: " + bcolors.ENDC + str(misses))
             break
     return computer_board, computer_ships, misses
-# Function to handle computer's turn
+
+
 def computer_turn(player_board, player_ships, misses):
+    """
+    Function to handle computer's turn
+    """
     print(bcolors.OKCYAN + "\nComputer's turn:" + bcolors.ENDC)
     while True:
         row = random.randint(0, len(player_board) - 1)
         col = random.randint(0, len(player_board[0]) - 1)
         if player_board[row][col] == 'M' or player_board[row][col] == 'X':
-            continue  # Try a different coordinate if it's already attempted
+            continue
         else:
             if (row, col) in player_ships:
-                player_board[row][col] = 'X' 
+                player_board[row][col] = 'X'
                 player_ships.remove((row, col))
                 print(bcolors.OKGREEN + "Computer hit! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
                 break
             else:
-                player_board[row][col] = 'M' 
+                player_board[row][col] = 'M'
                 print(bcolors.RED + "Computer missed! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
-                misses += 1  # Increment misses on miss
+                misses += 1
                 break
-    pause() # Call the pause function after the computer's turn
+    pause()
     return player_board, player_ships, misses
-# Function to handle the game loop
+
+
 def play_game():
-    while True:  # Loop for playing multiple games
-        os.system('cl' if os.name == 'nt' else 'clear') # Clear the screen
+    """
+    Function to handle the game loop
+    """
+    while True:
+        os.system('cl' if os.name == 'nt' else 'clear')
         welcome_message()
         display_high_scores()
         board_size = get_board_size()
-        pause() # Call pause after board size is chosen
+        pause()
         player_board, computer_board = create_boards(board_size)
-        player_ships = place_ships(player_board, 5)  # 5 ships of length 1
+        player_ships = place_ships(player_board, 5)
         computer_ships = place_ships(computer_board, 5)
         player_misses = 0
         computer_misses = 0
         while player_ships and computer_ships:
             computer_board, computer_ships, player_misses = player_turn(player_board, computer_board, computer_ships, player_misses)
-            if not computer_ships:  # Check if computer ships are empty
+            if not computer_ships:
                 print(bcolors.OKGREEN + "\nCongratulations! You win!" + bcolors.ENDC)
                 save_to_high_scores(player_misses)
-                break # Exit the inner loop if the player wins
+                break
             player_board, player_ships, computer_misses = computer_turn(player_board, player_ships, computer_misses)
-            if not player_ships:  # Check if player ships are empty
+            if not player_ships:
                 print(bcolors.RED + "\nYou lose! Better luck next time." + bcolors.ENDC)
-                break # Exit the inner loop if the player loses
+                break
         print("\nFinal Score:")
         print(f"Player: {player_misses}")
         print(f"Computer: {computer_misses}")
-        
-        while True:  # Loop for validating play again input
-            play_again = input("\nPlay again? (y/n): ").lower()  # Convert input to lowercase
+
+        while True:
+            play_again = input("\nPlay again? (y/n): ").lower()
             if play_again in ('y', 'n'):
-                os.system('cls' if os.name == 'nt' else 'clear') # Clear the screen
+                os.system('cls' if os.name == 'nt' else 'clear')
                 break
             else:
                 print("Invalid input. Please enter 'y' or 'n'.")
         if play_again == 'n':
             print("Goodbye!")
-            break  # Exit the game loop
-            
-# Function to handle saving scores to the spreadsheet
+            break
+
+
 def save_to_high_scores(misses):
+    """
+    Function to handle saving scores to the spreadsheet
+    """
     while True:
         save_score = input("Do you want to save your score to the high scores? (y/n): ")
         if save_score.lower() == 'y':
             name = input("Enter your name: ")
             SHEET.append_row([name, misses])
-            os.system('cls' if os.name == 'nt' else 'clear') # Clear the screen
+            os.system('cls' if os.name == 'nt' else 'clear')
             print("Score saved successfully!")
             display_high_scores()
             break
         elif save_score.lower() == 'n':
-            os.system('cls' if os.name == 'nt' else 'clear') # Clear the screen
+            os.system('cls' if os.name == 'nt' else 'clear')
             print("Score not saved.")
             display_high_scores()
             break
         else:
             print("Invalid input. Please enter 'y' or 'n'.")
 
-# Main function to run the game
+
 if __name__ == "__main__":
+    """
+    Main function to start the game
+    """
     play_game()
