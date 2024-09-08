@@ -3,6 +3,7 @@ import gspread
 from google.oauth2.service_account import Credentials
 import string
 import os
+import re
 
 # Set up Google Sheets API Credentials
 SCOPE = [
@@ -19,7 +20,7 @@ SHEET = GSPREAD_CLIENT.open('battleship_scores').sheet1
 # Function to center text in the console
 def center_text(text):
     console_width = os.get_terminal_size().columns
-    text_length = len(text)
+    text_length = len(re.sub(r'\x1b\[[0-9;]*m', '', text))  # Remove color codes
     padding = (console_width - text_length) // 2  # Calculate padding
     return " " * padding + text + " " * padding
 
@@ -35,7 +36,7 @@ class bcolors:
     OKCYAN = '\033[96m'
     OKGREEN = '\033[32m'
     WARNING = '\033[93m'
-    FAIL = '\033[31m'
+    RED = '\033[31m'
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
@@ -96,31 +97,27 @@ def place_ships(board, num_ships):
 # Function to display both boards side by side with colors and spacing
 def display_boards(player_board, computer_board):
     board_size = len(player_board)
-    header_spacing = board_size
-    if board_size == 9:
+    # Calculate header spacing, adjusting for different board sizes
+    header_spacing = board_size - 3  #  Start with a base spacing and adjust
+    if board_size == 6:
         header_spacing -= 1
-    elif board_size == 8:
-        header_spacing -= 2
     elif board_size == 7:
+        header_spacing -= 2
+    elif board_size == 8:
         header_spacing -= 3
-    elif board_size == 6:
+    elif board_size == 9:
         header_spacing -= 4
-    elif board_size == 5:
-        header_spacing -= 5
-    print("\nPlayer Board  " + " "*header_spacing + " |  Computer Board")
-    header_length = len("Player Board") + len("Computer Board") + 3  # 3 for spaces
-    spacing = 0
-    if board_size < 10:
-        spacing += 1
-    print(spacing)
-    print("   " + " ".join([str(i) for i in range(1, board_size + 1)]) + " "*spacing + "  |" + "    " + " ".join([str(i) for i in range(1, board_size + 1)]) + "  ")
+    # Center the header using center_text()
+    print("\n" + center_text(bcolors.RED + "Player Board  " + " "*header_spacing + bcolors.ENDC + " | " + bcolors.RED + " Computer Board" + bcolors.ENDC))
+    # Center the header using center_text()
+    print("\n" + center_text(bcolors.OKCYAN + "   " + " ".join([str(i) for i in range(1, board_size + 1)]) + " " + bcolors.ENDC + "  |" + "    " + bcolors.OKCYAN + " ".join([str(i) for i in range(1, board_size + 1)]) + "  " + bcolors.ENDC))
     letters = list(string.ascii_uppercase[:board_size])
     for i in range(board_size):
         player_row = []
         computer_row = []
         for j in range(board_size):
             if player_board[i][j] == 'X':
-                player_row.append(bcolors.FAIL + bcolors.BOLD + 'X' + bcolors.ENDC)  # Red 'X' for hit
+                player_row.append(bcolors.RED + bcolors.BOLD + 'X' + bcolors.ENDC)  # Red 'X' for hit
             elif player_board[i][j] == 'S':
                 player_row.append(bcolors.OKBLUE + bcolors.BOLD + 'S' + bcolors.ENDC)  # Blue 'S' for ship
             elif player_board[i][j] == 'M':
@@ -128,14 +125,17 @@ def display_boards(player_board, computer_board):
             else:
                 player_row.append(player_board[i][j])
             if computer_board[i][j] == 'X':
-                computer_row.append(bcolors.FAIL + bcolors.BOLD + 'X' + bcolors.ENDC)  # Red 'X' for hit
+                computer_row.append(bcolors.RED + bcolors.BOLD + 'X' + bcolors.ENDC)  # Red 'X' for hit
             elif computer_board[i][j] == 'M':
                 computer_row.append(bcolors.OKGREEN + bcolors.BOLD + 'M' + bcolors.ENDC)  # Green 'M' for miss
             else:
                 computer_row.append('O')
         player_row_str = ' '.join(player_row)
         computer_row_str = ' '.join(computer_row)
-        print(f"{letters[i]:<2} {player_row_str:<{len(player_row_str) + 2}} | {letters[i]:<2} {computer_row_str:<{len(player_row_str) + 2}}")
+        # Construct the entire row string
+        row_str = f"{bcolors.OKCYAN}{letters[i]:<2} {bcolors.ENDC}{player_row_str:<{len(player_row_str) + 2}} | {bcolors.OKCYAN}{letters[i]:<2}{bcolors.ENDC} {computer_row_str:<{len(computer_row_str) + 2}}"
+        # Print the centered row
+        print(center_text(row_str))
 
 # Function to get valid target coordinates
 def get_target(board):
@@ -166,7 +166,7 @@ def player_turn(player_board, computer_board, computer_ships, misses):
                 print(bcolors.OKGREEN + "Hit! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
             else:
                 computer_board[row][col] = 'M' 
-                print(bcolors.FAIL + "Miss! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
+                print(bcolors.RED + "Miss! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
                 misses += 1  # Increment misses on miss
             print(bcolors.OKCYAN + "\nMisses: " + bcolors.ENDC + str(misses))
             break
@@ -187,7 +187,7 @@ def computer_turn(player_board, player_ships, misses):
                 break
             else:
                 player_board[row][col] = 'M' 
-                print(bcolors.FAIL + "Computer missed! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
+                print(bcolors.RED + "Computer missed! Target: " + chr(ord('A') + row) + " " + str(col + 1) + bcolors.ENDC)
                 misses += 1  # Increment misses on miss
                 break
     pause() # Call the pause function after the computer's turn
@@ -213,7 +213,7 @@ def play_game():
                 break # Exit the inner loop if the player wins
             player_board, player_ships, computer_misses = computer_turn(player_board, player_ships, computer_misses)
             if not player_ships:  # Check if player ships are empty
-                print(bcolors.FAIL + "\nYou lose! Better luck next time." + bcolors.ENDC)
+                print(bcolors.RED + "\nYou lose! Better luck next time." + bcolors.ENDC)
                 break # Exit the inner loop if the player loses
         print("\nFinal Score:")
         print(f"Player: {player_misses}")
