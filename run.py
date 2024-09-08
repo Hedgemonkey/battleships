@@ -16,9 +16,16 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('battleship_scores').sheet1
 
+# Function to center text in the console
+def center_text(text):
+    console_width = os.get_terminal_size().columns
+    text_length = len(text)
+    padding = (console_width - text_length) // 2  # Calculate padding
+    return " " * padding + text + " " * padding
+
 # Function to pause and clear the screen
 def pause():
-  input(bcolors.OKCYAN + "\nPress Enter to continue..." + bcolors.ENDC)
+  input(bcolors.OKCYAN + center_text("\nPress Enter to continue...") + bcolors.ENDC)
   os.system('cls' if os.name == 'nt' else 'clear') # Clear the screen
     
 # Colors for console output
@@ -35,18 +42,18 @@ class bcolors:
 
 # Function to display the welcome message with colors
 def welcome_message():
-    print(bcolors.HEADER + bcolors.BOLD + "\nWelcome to Battleships!\n" + bcolors.ENDC)
+    print(bcolors.HEADER + bcolors.BOLD + center_text("Welcome to Battleships!") + bcolors.ENDC)
 
 # Function to display top 5 high scores
 def display_high_scores():
-    print(bcolors.OKCYAN + "\nTop 5 Lowest Misses:" + bcolors.ENDC)
+    print("\n" + bcolors.OKCYAN + center_text("Top 5 Lowest Misses:") + bcolors.ENDC)
     scores = SHEET.get_all_values()
     # Sort by the score (second column, index 1)
     sorted_scores = scores[1:]  # Ignore the first row (header)
     sorted_scores.sort(key=lambda x: int(x[1]))  # Sort based on the score column (index 1)
     for i in range(1, 6):  # Start the loop from 1
         if i <= len(sorted_scores):  # Use sorted_scores for indexing
-            print(f"{i}. {sorted_scores[i-1][0]}: {sorted_scores[i-1][1]}")
+            print(center_text(f"{i}. {sorted_scores[i-1][0]}: {sorted_scores[i-1][1]}"))
         else:
             print(f"{i}. N/A")
 
@@ -54,11 +61,11 @@ def display_high_scores():
 def get_board_size():
     while True:
         try:
-            size = int(input("Choose board size (5-10): "))
-            if 5 <= size <= 10:
+            size = int(input("Choose board size (5-9): "))
+            if 5 <= size <= 9:
                 return size
             else:
-                print("Invalid size. Please enter a number between 5 and 10.")
+                print("Invalid size. Please enter a number between 5 and 9")
         except ValueError:
             print("Invalid input. Please enter a number.")
 
@@ -209,6 +216,7 @@ def play_game():
         if play_again == 'n':
             print("Goodbye!")
             break  # Exit the game loop
+            
 # Function to handle saving scores to the spreadsheet
 def save_to_high_scores(misses):
     while True:
