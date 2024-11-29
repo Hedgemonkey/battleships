@@ -26,13 +26,13 @@ This is a simple command-line Battleship game written in Python, with a leader b
 ## Screenshots
 | Heroku Deployed App |
 | :---: |
-| ![Screenshot of app on Heroku](readme/screenshot.png) |
+| ![Screenshot of app on Heroku](readme/screenshot.jpg) |
 | This is the app showing the Welcome screenwith Leaderboard with scores sourced through Google Docs API |
 
 ## Flow Chart Screenshots
 | Flow Chart Screenshot |
 | :---: |
-| ![Screenshot of Flowchart](readme/flow_chart.png) |
+| ![Screenshot of Flowchart](readme/flow_chart.jpg) |
 | This is a rough flow chart displaying the program processes made using [Milanote](https://milanote.com/)
 
 [Back to top](#contents)
@@ -66,7 +66,7 @@ The following manual tests were conducted to ensure the application works as exp
 - The welcome message is displayed correctly.
 
 **Screenshot:**
-![Welcome Message](readme/welcome_message.png)
+![Welcome Message](readme/welcome.jpg)
 
 #### Test 2: High Scores Display
 **Steps:**
@@ -80,7 +80,7 @@ The following manual tests were conducted to ensure the application works as exp
 - The high scores are displayed correctly.
 
 **Screenshot:**
-![High Scores](readme/high_scores.png)
+![High Scores](readme/welcome.jpg)
 
 #### Test 3: Board Size Input
 **Steps:**
@@ -94,7 +94,7 @@ The following manual tests were conducted to ensure the application works as exp
 - The application accepts valid inputs and proceeds correctly.
 
 **Screenshot:**
-![Board Size Input](readme/board_size_input.png)
+![Board Size Input](readme/board_size.jpg)
 
 #### Test 4: Invalid Board Size Input
 **Steps:**
@@ -108,7 +108,7 @@ The following manual tests were conducted to ensure the application works as exp
 - The application displays an error message and prompts for input again.
 
 **Screenshot:**
-![Invalid Board Size Input](readme/invalid_board_size_input.png)
+![Invalid Board Size Input](readme/board_size.jpg)
 
 #### Test 5: Player Turn
 **Steps:**
@@ -122,7 +122,7 @@ The following manual tests were conducted to ensure the application works as exp
 - The application updates the board and displays the result correctly.
 
 **Screenshot:**
-![Player Turn](readme/player_turn.png)
+![Player Turn](readme/player_turn.jpg)
 
 #### Test 6: Computer Turn
 **Steps:**
@@ -136,7 +136,7 @@ The following manual tests were conducted to ensure the application works as exp
 - The application updates the board and displays the result correctly.
 
 **Screenshot:**
-![Computer Turn](readme/computer_turn.png)
+![Computer Turn](readme/player_turn.jpg)
 
 #### Test 7: Game Over
 **Steps:**
@@ -150,7 +150,7 @@ The following manual tests were conducted to ensure the application works as exp
 - The application displays the game over message and the final scores correctly.
 
 **Screenshot:**
-![Game Over](readme/game_over.png)
+![Game Over](readme/game_over.jpg)
 
 #### Test 8: Save High Score
 **Steps:**
@@ -159,13 +159,15 @@ The following manual tests were conducted to ensure the application works as exp
 3. Enter a name when prompted.
 
 **Expected Result:**
-- The application should save the high score to the Google Sheets and display a success message.
+The application should save the high score to the Google Sheets and display a success message.
 
 **Actual Result:**
-- The application saves the high score and displays the success message correctly.
+The application saves the high score and displays the success message correctly.
+
+**Empty Username:**  Players can intentionally leave the username field empty if they prefer not to submit a name.  The high score will still be recorded on the leaderboard with a blank entry for the name.
 
 **Screenshot:**
-![Save High Score](readme/save_high_score.png)
+![Save High Score](readme/save_high_score.jpg)
 
 [Back to top](#contents)
 
