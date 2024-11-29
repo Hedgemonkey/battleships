@@ -47,10 +47,143 @@ This is a simple command-line Battleship game written in Python, with a leader b
 [Back to top](#contents)
 
 ## Testing
+
 ### Replit
-Most of this project was developed using Replit and so testing was done as I was building the project step by step
+Most of this project was developed using Replit and so testing was done as I was building the project step by step.
+
+### Manual Testing
+The following manual tests were conducted to ensure the application works as expected:
+
+#### Test 1: Welcome Message
+**Steps:**
+1. Run the application.
+2. Observe the welcome message displayed in the console.
+
+**Expected Result:**
+- The welcome message should be centered and displayed with appropriate colors.
+
+**Actual Result:**
+- The welcome message is displayed correctly.
+
+**Screenshot:**
+![Welcome Message](readme/welcome_message.png)
+
+#### Test 2: High Scores Display
+**Steps:**
+1. Run the application.
+2. Observe the high scores displayed after the welcome message.
+
+**Expected Result:**
+- The high scores should be displayed in a centered format with appropriate colors.
+
+**Actual Result:**
+- The high scores are displayed correctly.
+
+**Screenshot:**
+![High Scores](readme/high_scores.png)
+
+#### Test 3: Board Size Input
+**Steps:**
+1. Run the application.
+2. Enter a valid board size (between 5 and 9).
+
+**Expected Result:**
+- The application should accept the input and proceed to the next step.
+
+**Actual Result:**
+- The application accepts valid inputs and proceeds correctly.
+
+**Screenshot:**
+![Board Size Input](readme/board_size_input.png)
+
+#### Test 4: Invalid Board Size Input
+**Steps:**
+1. Run the application.
+2. Enter an invalid board size (outside the range of 5 to 9).
+
+**Expected Result:**
+- The application should display an error message and prompt for input again.
+
+**Actual Result:**
+- The application displays an error message and prompts for input again.
+
+**Screenshot:**
+![Invalid Board Size Input](readme/invalid_board_size_input.png)
+
+#### Test 5: Player Turn
+**Steps:**
+1. Run the application.
+2. Enter valid coordinates for the player's turn.
+
+**Expected Result:**
+- The application should update the board and display the result (hit or miss).
+
+**Actual Result:**
+- The application updates the board and displays the result correctly.
+
+**Screenshot:**
+![Player Turn](readme/player_turn.png)
+
+#### Test 6: Computer Turn
+**Steps:**
+1. Run the application.
+2. Observe the computer's turn.
+
+**Expected Result:**
+- The application should update the board and display the result (hit or miss).
+
+**Actual Result:**
+- The application updates the board and displays the result correctly.
+
+**Screenshot:**
+![Computer Turn](readme/computer_turn.png)
+
+#### Test 7: Game Over
+**Steps:**
+1. Run the application.
+2. Play the game until either the player or the computer wins.
+
+**Expected Result:**
+- The application should display the game over message and the final scores.
+
+**Actual Result:**
+- The application displays the game over message and the final scores correctly.
+
+**Screenshot:**
+![Game Over](readme/game_over.png)
+
+#### Test 8: Save High Score
+**Steps:**
+1. Run the application.
+2. Win the game and choose to save the high score.
+3. Enter a name when prompted.
+
+**Expected Result:**
+- The application should save the high score to the Google Sheets and display a success message.
+
+**Actual Result:**
+- The application saves the high score and displays the success message correctly.
+
+**Screenshot:**
+![Save High Score](readme/save_high_score.png)
 
 [Back to top](#contents)
+
+### PEP 8 Compliance
+
+The project's Python code has been refactored to improve adherence to PEP 8 style guidelines.  This enhances readability and maintainability.  Specific improvements include:
+
+* **Reduced Branching:** Complex conditional logic, particularly in the `display_boards` function, has been simplified to reduce the number of branches, improving code clarity.
+* **Modernized String Formatting:**  F-strings (formatted string literals) have been adopted throughout the codebase for more concise and readable string formatting.
+* **Removed Redundant Code:** Unnecessary `else` clauses following `return`, `break`, and `continue` statements have been eliminated.
+* **Import Order:** Imports have been reorganized to follow PEP 8 recommendations (standard library imports first, followed by third-party and then local imports).
+
+These changes were guided by feedback from the `pylint` static analysis tool.
+
+![Pylint Output](readme/pylint_screenshot.jpg)
+
+[Back to top](#contents)
+
 
 ## Future
 ### Potential Future Features
